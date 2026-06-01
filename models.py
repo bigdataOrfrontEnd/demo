@@ -1,6 +1,5 @@
-from pydantic import BaseModel, ConfigDict
-from sqlalchemy import String, Boolean
 
+from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import List, Optional
 from database import Base
@@ -13,21 +12,6 @@ class DBItem(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     title: Mapped[str] = mapped_column(String, index=True)
     description: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-
-
-# ==========================================
-# 2. Pydantic 数据校验模型 (Schemas)
-# ==========================================
-class ItemBase(BaseModel):
-    title: str
-    description: Optional[str] = None
-
-class ItemCreate(ItemBase):
-    pass
-
-class ItemResponse(ItemBase):
-    id: int
-    model_config = ConfigDict(from_attributes=True)
 
 #定义一个TODOLISt的数据库模型，增加一个字段is_completed，表示是否完成
 
