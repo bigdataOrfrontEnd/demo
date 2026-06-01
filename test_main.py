@@ -1,28 +1,35 @@
 # test_main.py
 import pytest
-from httpx import AsyncClient, ASGITransport  # 1. 额外导入 ASGITransport
+from httpx import AsyncClient, ASGITransport
 from main import app 
+from database import init_db, engine
+
+@pytest.fixture(scope="session", autouse=True)
+async def setup_database():
+    await init_db()
+    yield
+    await engine.dispose()
 
 @pytest.mark.asyncio
-async def test_create_and_read_item():
-    # 2. 将 app 封装进 ASGITransport 中
+async def test_user_todo_relationship():
     transport = ASGITransport(app=app)
-    
-    # 3. 将 transport 传给 AsyncClient
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         
-        # 下面的测试逻辑保持完全不变
-        # 1. 测试 POST (创建)
-        payload = {"title": "测试商品", "description": "这是一个自动化测试生成的商品"}
-        response = await ac.post("/items/", json=payload)
+        # 1. 创建一个用户
+        user_res = await ac.post("/users/", json={"username": "张三", "email": "zhangsan@colleg.com"})
+        assert user_res.status_code == 201
+        user_id = user_res.json()["id"]
         
-        assert response.status_code == 201
-        data = response.json()
-        assert data["title"] == "测试商品"
-        assert "id" in data
-        item_id = data["id"]
-
-        # 2. 测试 GET (获取单个详情)
-        response_get = await ac.get(f"/items/{item_id}")
-        assert response_get.status_code == 200
-        assert response_get.json()["title"] == "测试商品"
+        # 2. 联动创建：给张三安排一个“学多表联动”的任务
+        todo_res = await ac.post(f"/users/{user_id}/todos/", json={"title": "学多表联动"})
+        assert todo_res.status_code == 200
+        assert todo_res.json()["user_id"] == user_id
+        
+        # 3. 联动查询：获取张三的资料，看任务是不是在里面
+        get_res = await ac.get(f"/users/{user_id}")
+        assert get_res.status_code == 200
+        data = get_res.json()
+        
+        assert data["username"] == "张三"
+        assert len(data["todos"]) == 1  # 此时这里应该有一条关联任务了！
+        assert data["todos"][0]["title"] == "学多表联动"
