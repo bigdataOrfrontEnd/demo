@@ -1,0 +1,228 @@
+/* ===== 全局重置 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  min-height: 100vh;
+}
+
+/* ===== 应用布局 ===== */
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #16213e;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 680px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== 卡片面板 ===== */
+.user-panel,
+.todo-panel {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.user-panel h2,
+.todo-header h2 {
+  font-size: 1.15rem;
+  margin-bottom: 16px;
+}
+
+/* ===== 表单 ===== */
+.user-form,
+.todo-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.user-form {
+  flex-direction: column;
+}
+
+.todo-form {
+  flex-direction: row;
+}
+
+.user-form input,
+.todo-form input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.user-form input:focus,
+.todo-form input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+button {
+  padding: 10px 20px;
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background: #4338ca;
+}
+
+button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.todo-form button {
+  padding: 10px 16px;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* ===== 用户列表 ===== */
+.user-list h3 {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.user-list ul {
+  list-style: none;
+}
+
+.user-list li {
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.user-list li:hover {
+  background: #f3f4f6;
+}
+
+.user-list li.active {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+}
+
+.user-name {
+  font-weight: 600;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* ===== TODO 列表 ===== */
+.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-stats {
+  font-size: 0.85rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.todo-list {
+  list-style: none;
+}
+
+.todo-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 8px;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background 0.15s;
+}
+
+.todo-list li:last-child {
+  border-bottom: none;
+}
+
+.todo-list li.empty {
+  color: #9ca3af;
+  font-style: italic;
+  justify-content: center;
+}
+
+.todo-check {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.todo-list li.done .todo-title {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.todo-title {
+  font-size: 0.95rem;
+}
+
+/* ===== 通用 ===== */
+.error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+}
+
+.muted {
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.loading {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px 0;
+}
