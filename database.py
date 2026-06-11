@@ -2,12 +2,32 @@
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
+import json
+import logging
+import os
+import shutil
+from datetime import datetime
+from sqlalchemy import create_engine, event, text
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy.pool import NullPool
 
 # 1. 公用的数据库连接配置
-DATABASE_URL = "sqlite+aiosqlite:///./test.db"
+logger = logging.getLogger(__name__)
+
+DB_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "data", "panwatch.db")
+os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+
 
 # 2. 封装公用的异步引擎 (Engine)
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_engine(
+    f"sqlite:///{DB_PATH}",
+    echo=False,
+    connect_args={
+        "timeout": 30,
+        "check_same_thread": False,
+    },
+    poolclass=NullPool,
+)
 
 # 3. 封装公用的异步会话工厂 (Session Factory)
 AsyncSessionLocal = async_sessionmaker(
